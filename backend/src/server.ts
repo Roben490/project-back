@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io'
 import { connectToMongo } from './DB/DB';
+import { router } from './routers/player.routes';
 
 dotenv.config();
 
@@ -11,6 +12,9 @@ const server = http.createServer(app);
 const io = new Server(server)
 
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use('/api', router);
 
 io.on('connection', (socket) => {
     console.log('User Connected');
