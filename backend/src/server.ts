@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import http from 'http';
 import { Server } from 'socket.io'
+import { connectToMongo } from './DB/DB';
 
 dotenv.config();
 
@@ -23,6 +24,11 @@ app.get('/', (req, res) => {
   res.send('Server is running with TypeScript');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
-});
+const startServer = async () => {
+    await connectToMongo();
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  };
+
+  startServer();
