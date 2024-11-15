@@ -1,6 +1,10 @@
+import { Schema } from "mongoose";
+
 export interface IPlayer extends Document {
+    _id?: Schema.Types.ObjectId;
     username: string;
-    score: number;
-    lives: number;
-    createdAt: Date;
+    email: string;
+    score?: number;
+    lives?: number;
+    createdAt?: Date;
   }

@@ -1,7 +1,7 @@
+import mongoose from 'mongoose';
 import { IPlayer } from '../interfaces/IPlayer';
 import { Player } from '../models/Player.model';
 
-// Get a player by ID
 export const getPlayerById = async (id: string): Promise<IPlayer | null> => {
   try {
     return await Player.findById(id);
@@ -10,14 +10,13 @@ export const getPlayerById = async (id: string): Promise<IPlayer | null> => {
   }
 };
 
-// Update player score
 export const updatePlayerScore = async (playerId: string, score: number) => {
   try {
     const player = await Player.findById(playerId);
     if (!player) {
       throw new Error('Player not found');
     }
-    player.score = score;
+    player.score! += score;
     await player.save();
     return player;
   } catch (error) {
@@ -25,18 +24,18 @@ export const updatePlayerScore = async (playerId: string, score: number) => {
   }
 };
 
-// Create a new player
-export const createNewPlayer = async (name: string, email: string) => {
+export const createNewPlayer = async (newPlayer: IPlayer): Promise<IPlayer> => {
   try {
-    const newPlayer = new Player({
-      name,
-      email,
-      score: 0, // default score
-      lives: 3, // default lives
-    });
-    await newPlayer.save();
-    return newPlayer;
+      const nPlayer = await new Player({
+        _id: new mongoose.Types.ObjectId(),
+        username: newPlayer.username,
+        email: newPlayer.email
+        });
+        console.log(nPlayer);
+    await nPlayer.save();
+    console.log(nPlayer);
+    return nPlayer;
   } catch (error) {
-    throw new Error('Error creating new player');
+    throw error;
   }
 };

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as playerService from '../services/player.service';
+import { IPlayer } from '../interfaces/IPlayer';
 
-// Route to get player stats
 export const getPlayerStats = async (req: Request, res: Response): Promise<void> => {
   try {
     const player = await playerService.getPlayerById(req.params.id);
@@ -16,11 +16,11 @@ export const getPlayerStats = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// Route to update player score after game ends
 export const updatePlayerScore = async (req: Request, res: Response): Promise<void> => {
-  const { playerId, score } = req.body;
+  const { score } = req.body;
+  const { id } = req.params;
   try {
-    const updatedPlayer = await playerService.updatePlayerScore(playerId, score);
+    const updatedPlayer = await playerService.updatePlayerScore(id, score);
     if (!updatedPlayer) {
         res.status(404).json({ msg: 'Player not found' });
         return;
@@ -32,11 +32,16 @@ export const updatePlayerScore = async (req: Request, res: Response): Promise<vo
   }
 };
 
-// Route to create a new player
 export const createNewPlayer = async (req: Request, res: Response): Promise<void> => {
-  const { name, email } = req.body;
+  const playerFromBody: IPlayer = req.body;
+  console.log(playerFromBody);
+  
   try {
-    const newPlayer = await playerService.createNewPlayer(name, email);
+    const newPlayer = await playerService.createNewPlayer(playerFromBody);
+    console.log(newPlayer
+        
+    );
+    
     res.status(201).json(newPlayer);
   } catch (error) {
     console.error(error);
